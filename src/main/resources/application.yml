@@ -1,0 +1,9 @@
+server:
+  name: sml-pob
+  url: localhost
+  port: 8080
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/travellerDB
