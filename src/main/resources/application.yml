@@ -1,7 +1,7 @@
 server:
-  name: sml-pob
+  name: traveller_api
   url: localhost
-  port: 8080
+  port: 9000
 
 spring:
   data:
