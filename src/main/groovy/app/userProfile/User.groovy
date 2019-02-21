@@ -32,6 +32,10 @@ class User {
         return userId
     }
 
+    void setUserId(String userId) {
+        this.userId = userId
+    }
+
     String getFirstName() {
         return firstName
     }

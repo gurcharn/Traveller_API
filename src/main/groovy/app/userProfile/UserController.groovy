@@ -24,37 +24,41 @@ class UserController {
         return userService.findByUserId(userId);
     }
 
-    @PostMapping
-    void createUser(@RequestBody User user){
-        if(!isUserValid(user))
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "User Validation Failed");
-        else if(isUserExist(user.getEmail()))
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "User Already Exist")
-        else
-            userService.insert(user);
-    }
-
     @PatchMapping
     void updateUser(@RequestBody User user){
         if(!isUserValid(user) || !user.getUserId())
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "User Validation Failed");
-        else if(!isUserExist(user.getEmail()))
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "User doesn't exist");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "User Validation Failed")
+        else if(!isUserExist(user.getEmail()) || !isUserIdExist(user.getUserId()))
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "User doesn't exist")
         else
-            userService.save(user);
-
+            userService.save(user)
     }
 
-    @DeleteMapping
-    void deleteUser(@RequestParam(required = true) String userId){
-        userService.delete(userId);
+    void deleteUser(String userId){
+        if(isUserIdExist(userId))
+            userService.delete(userId)
+        else
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "User Id not found")
+    }
+
+    User createUser(User user){
+        if(!isUserValid(user))
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "User Validation Failed")
+        else if(isUserExist(user.getEmail()))
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "User Already Exist")
+        else
+           return userService.insert(user)
     }
 
     boolean isUserValid(User user){
-        return user && user.getEmail();
+        return user && user.getEmail()
     }
 
     boolean isUserExist(String email){
-        return !(userService.findByEmail(email).isEmpty());
+        return !(userService.findByEmail(email).isEmpty())
+    }
+
+    boolean isUserIdExist(String userId){
+        return userService.findByUserId(userId)
     }
 }
