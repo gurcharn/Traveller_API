@@ -6,5 +6,4 @@ interface LoginService extends MongoRepository<Login, String> {
 
     Login findByUserId(String userId)
     List<Login> findByUsername(String username)
-    List<Login> findByEmail(String email)
 }

@@ -1,5 +1,7 @@
 package app.login
 
+import app.jwt.model.JwtUser
+import app.jwt.security.JwtGenerator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.PatchMapping
@@ -14,17 +16,30 @@ import org.springframework.web.client.HttpClientErrorException
 class LoginController {
 
     @Autowired
+    private JwtGenerator jwtGenerator;
+    @Autowired
     private LoginService loginService;
 
     @PostMapping
     String login(@RequestBody Login login){
-        //To-DO check for user and password & return token\
+        List<Login> loginFromDb = loginService.findByUsername(login.getUsername())
 
-        return ""
+        if(loginFromDb.isEmpty())
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "Invalid User")
+        else
+            authenticateLogin(login, loginFromDb.get(0))
     }
 
-    @PatchMapping
-    void updateLogin(@RequestBody(required = true) Login login){
+    Login createLogin(Login login){
+        if(!isLoginValid(login))
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "Login Validation Failed")
+        else if(isLoginUsernameExist(login.getUsername()))
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "Username already exist")
+        else
+            return loginService.insert(login)
+    }
+
+    void updateLogin(Login login){
         if(isUserIdExist(login.getUserId()))
             loginService.save(login)
         else
@@ -38,15 +53,6 @@ class LoginController {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "User Id not found")
     }
 
-    Login createLogin(Login login){
-        if(!isLoginValid(login))
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "Login Validation Failed")
-        else if(isLoginUsernameExist(login.getUsername()))
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "Username already exist")
-        else
-            return loginService.insert(login)
-    }
-
     boolean isLoginValid(Login login){
         return login && login.getUsername() && login.getPassword()
     }
@@ -57,5 +63,17 @@ class LoginController {
 
     boolean isUserIdExist(String userId){
         return loginService.findByUserId(userId)
+    }
+
+    String authenticateLogin(Login requestBody, Login remote){
+        if(requestBody.equals(remote)){
+            JwtUser jwtUser = new JwtUser()
+            jwtUser.setId(remote.getUserId())
+            jwtUser.setUserName(remote.getUsername())
+
+            return jwtGenerator.generate(jwtUser)
+        } else {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "Authentication Failed")
+        }
     }
 }

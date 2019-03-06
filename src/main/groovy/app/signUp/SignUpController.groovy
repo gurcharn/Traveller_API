@@ -33,10 +33,4 @@ class SignUpController {
         user.setUserId(login.getUserId())
         userController.createUser(user)
     }
-
-    @DeleteMapping
-    void delete(@RequestParam(required = true) String userId){
-        userController.deleteUser(userId)
-        loginController.deleteLogin(userId)
-    }
 }

@@ -7,3 +7,10 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/travellerDB
+  resources:
+      chain:
+        enabled: true
+
+management:
+  security:
+    enabled: true

@@ -37,4 +37,24 @@ class Login {
     void setPassword(String password) {
         this.password = password
     }
+
+    boolean equals(o) {
+        if (!(o instanceof Login)) return false
+
+        Login login = (Login) o
+
+        if (userId == login.userId) return true
+        if (password != login.password) return false
+        if (username != login.username) return false
+
+        return true
+    }
+
+    int hashCode() {
+        int result
+        result = (userId != null ? userId.hashCode() : 0)
+        result = 31 * result + (username != null ? username.hashCode() : 0)
+        result = 31 * result + (password != null ? password.hashCode() : 0)
+        return result
+    }
 }
