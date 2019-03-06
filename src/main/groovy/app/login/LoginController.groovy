@@ -2,6 +2,7 @@ package app.login
 
 import app.jwt.model.JwtUser
 import app.jwt.security.JwtGenerator
+import app.passwordHashing.PasswordEncoder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.PatchMapping
@@ -16,9 +17,11 @@ import org.springframework.web.client.HttpClientErrorException
 class LoginController {
 
     @Autowired
-    private JwtGenerator jwtGenerator;
+    private LoginService loginService
     @Autowired
-    private LoginService loginService;
+    private JwtGenerator jwtGenerator
+    @Autowired
+    private PasswordEncoder passwordEncoder
 
     @PostMapping
     String login(@RequestBody Login login){
@@ -35,8 +38,10 @@ class LoginController {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "Login Validation Failed")
         else if(isLoginUsernameExist(login.getUsername()))
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "Username already exist")
-        else
+        else {
+            login.setPassword(passwordEncoder.encode(login.getPassword()))
             return loginService.insert(login)
+        }
     }
 
     void updateLogin(Login login){

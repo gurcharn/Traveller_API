@@ -1,5 +1,6 @@
 package app.login
 
+import app.passwordHashing.PasswordEncoder
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
@@ -44,7 +45,7 @@ class Login {
         Login login = (Login) o
 
         if (userId == login.userId) return true
-        if (password != login.password) return false
+        if (!comparePassword(password, login.getPassword())) return false
         if (username != login.username) return false
 
         return true
@@ -56,5 +57,10 @@ class Login {
         result = 31 * result + (username != null ? username.hashCode() : 0)
         result = 31 * result + (password != null ? password.hashCode() : 0)
         return result
+    }
+
+    private Boolean comparePassword(String password, String hashPassword){
+        PasswordEncoder passwordEncoder = new PasswordEncoder()
+        passwordEncoder.macth(password, hashPassword)
     }
 }
