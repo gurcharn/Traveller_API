@@ -14,3 +14,6 @@ spring:
 management:
   security:
     enabled: true
+
+jwt:
+  secretKey: traveller_api_secret_key_jwt
