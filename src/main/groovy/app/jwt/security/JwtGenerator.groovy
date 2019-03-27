@@ -1,6 +1,7 @@
 package app.jwt.security
 
 import app.jwt.model.JwtUser
+import app.jwt.model.JwtUserDetails
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
@@ -13,14 +14,20 @@ class JwtGenerator {
     @Value('${jwt.secretKey}')
     private String secretKey
 
-    String generate (JwtUser jwtUser) {
+    JwtUserDetails generate (JwtUser jwtUser) {
+        String token
+        JwtUserDetails jwtUserDetails
         Claims claims = Jwts.claims().setSubject(jwtUser.getUserName())
 
         claims.put("userId", String.valueOf(jwtUser.getId()))
 
-        return Jwts.builder()
-                .setClaims(claims)
-                .signWith(SignatureAlgorithm.HS512, secretKey)
-                .compact()
+        token = Jwts.builder()
+                            .setClaims(claims)
+                            .signWith(SignatureAlgorithm.HS512, secretKey)
+                            .compact()
+
+        jwtUserDetails = new JwtUserDetails(jwtUser.getUserName(), jwtUser.getId(), token, null)
+
+        return jwtUserDetails
     }
 }

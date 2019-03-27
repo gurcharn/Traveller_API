@@ -1,6 +1,7 @@
 package app.login
 
 import app.jwt.model.JwtUser
+import app.jwt.model.JwtUserDetails
 import app.jwt.security.JwtGenerator
 import app.passwordHashing.PasswordEncoder
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,7 +25,7 @@ class LoginController {
     private PasswordEncoder passwordEncoder
 
     @PostMapping
-    String login(@RequestBody Login login){
+    JwtUserDetails login(@RequestBody Login login){
         List<Login> loginFromDb = loginService.findByUsername(login.getUsername())
 
         if(loginFromDb.isEmpty())
@@ -40,7 +41,7 @@ class LoginController {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "Username already exist")
         else {
             login.setPassword(passwordEncoder.encode(login.getPassword()))
-            return loginService.insert(login)
+            loginService.insert(login)
         }
     }
 
@@ -70,7 +71,7 @@ class LoginController {
         return loginService.findByUserId(userId)
     }
 
-    String authenticateLogin(Login requestBody, Login remote){
+    JwtUserDetails authenticateLogin(Login requestBody, Login remote){
         if(requestBody.equals(remote)){
             JwtUser jwtUser = new JwtUser()
             jwtUser.setId(remote.getUserId())

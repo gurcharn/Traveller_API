@@ -26,11 +26,23 @@ class SignUpController {
     private UserController userController
 
     @PostMapping
-    void signUp(@RequestBody SignUp signUp){
-        Login login = loginController.createLogin(signUp.getLogin())
+    User signUp(@RequestBody SignUp signUp){
+        Login login = signUp.getLogin()
         User user = signUp.getUser()
 
-        user.setUserId(login.getUserId())
-        userController.createUser(user)
+        Boolean isUsernameExist = loginController.isLoginUsernameExist(login.getUsername())
+        Boolean isEmailExist = userController.isUserExist(user.getEmail())
+
+        if(isUsernameExist && isEmailExist){
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "Username and Email id already exist")
+        } else if(isUsernameExist){
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "Username already exist")
+        } else if(isEmailExist){
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "Email id already exist")
+        } else{
+            login = loginController.createLogin(signUp.getLogin())
+            user.setUserId(login.getUserId())
+            userController.createUser(user)
+        }
     }
 }
