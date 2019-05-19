@@ -13,6 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.client.HttpClientErrorException
 
+/**
+ * @author Gurcharn Singh Sikka
+ * @version 1.0
+ *
+ * Controller to handle handle requests with endpoint login
+ */
 @RestController
 @RequestMapping("/login")
 class LoginController {
@@ -24,6 +30,11 @@ class LoginController {
     @Autowired
     private PasswordEncoder passwordEncoder
 
+    /**
+     * Method to handle login request
+     * @param login
+     * @return JwtUserDetails
+     */
     @PostMapping
     JwtUserDetails login(@RequestBody Login login){
         List<Login> loginFromDb = loginService.findByUsername(login.getUsername())
@@ -34,6 +45,11 @@ class LoginController {
             authenticateLogin(login, loginFromDb.get(0))
     }
 
+    /**
+     * Method to insert login information in DB
+     * @param login
+     * @return Login
+     */
     Login createLogin(Login login){
         if(!isLoginValid(login))
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "Login Validation Failed")
@@ -45,6 +61,10 @@ class LoginController {
         }
     }
 
+    /**
+     * Method to update login information in DB
+     * @param login
+     */
     void updateLogin(Login login){
         if(isUserIdExist(login.getUserId()))
             loginService.save(login)
@@ -52,6 +72,10 @@ class LoginController {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "User Id not found")
     }
 
+    /**
+     * Method to delete login information from DB
+     * @param userId
+     */
     void deleteLogin(String userId){
         if(isUserIdExist(userId))
             loginService.delete(userId)
@@ -59,18 +83,39 @@ class LoginController {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "User Id not found")
     }
 
+    /**
+     * Method to check if object is a valid login object
+     * @param login
+     * @return boolean
+     */
     boolean isLoginValid(Login login){
         return login && login.getUsername() && login.getPassword()
     }
 
+    /**
+     * Method to check is username already exists in DB
+     * @param username
+     * @return boolean
+     */
     boolean isLoginUsernameExist(String username){
         return !(loginService.findByUsername(username).isEmpty())
     }
 
+    /**
+     * Method to check if user id already exists in DB
+     * @param userId
+     * @return boolean
+     */
     boolean isUserIdExist(String userId){
         return loginService.findByUserId(userId)
     }
 
+    /**
+     * Method to authenticate request body in login request
+     * @param requestBody
+     * @param remote
+     * @return JwtUserDetails
+     */
     JwtUserDetails authenticateLogin(Login requestBody, Login remote){
         if(requestBody.equals(remote)){
             JwtUser jwtUser = new JwtUser()
