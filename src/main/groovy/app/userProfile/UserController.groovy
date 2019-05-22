@@ -24,22 +24,22 @@ class UserController {
 
     @GetMapping
     User getUser(@RequestParam(required = true) String userId){
-        return userService.findByUserId(userId);
+        return userService.findByUserId(userId)
     }
 
     @PatchMapping("/update/userProfile")
-    void updateUserProfile(@RequestBody User user){
+    User updateUserProfile(@RequestBody User user){
         if(!isUserValid(user) || !user.getUserId())
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "User Validation Failed")
         else if(!isUserExist(user.getEmail()) || !isUserIdExist(user.getUserId()))
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "User doesn't exist")
         else
-            userService.save(user)
+            return userService.save(user)
     }
 
     @PatchMapping("/update/login")
-    void updateLogin(@RequestBody Login login){
-        loginController.updateLogin(login)
+    Login updateLogin(@RequestBody Login login){
+        return loginController.updateLogin(login)
     }
 
     @DeleteMapping

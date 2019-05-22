@@ -65,9 +65,9 @@ class LoginController {
      * Method to update login information in DB
      * @param login
      */
-    void updateLogin(Login login){
+    Login updateLogin(Login login){
         if(isUserIdExist(login.getUserId()))
-            loginService.save(login)
+            return loginService.save(login)
         else
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "User Id not found")
     }

@@ -15,10 +15,11 @@ class User {
     private String bio;
     private String email;
     private String facebook;
+    private List<String> likes;
 
     User() {}
 
-    User(String firstName, String lastName, String dateOfBirth, String gender, String bio, String email, String facebook) {
+    User(String firstName, String lastName, String dateOfBirth, String gender, String bio, String email, String facebook, List<String> likes) {
         this.firstName = firstName
         this.lastName = lastName
         this.dateOfBirth = dateOfBirth
@@ -26,6 +27,7 @@ class User {
         this.bio = bio
         this.email = email
         this.facebook = facebook
+        this.likes = likes
     }
 
     String getUserId() {
@@ -90,5 +92,13 @@ class User {
 
     void setFacebook(String facebook) {
         this.facebook = facebook
+    }
+
+    List<String> getLikes() {
+        return likes
+    }
+
+    void setLikes(List<String> likes) {
+        this.likes = likes
     }
 }
