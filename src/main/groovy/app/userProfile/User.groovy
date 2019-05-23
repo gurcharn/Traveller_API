@@ -7,25 +7,27 @@ import org.springframework.data.mongodb.core.mapping.Document
 class User {
 
     @Id
-    private String userId;
-    private String firstName;
-    private String lastName;
-    private String dateOfBirth;
-    private String gender;
-    private String bio;
-    private String email;
-    private String facebook;
-    private List<String> likes;
+    private String userId
+    private String firstName
+    private String lastName
+    private String age
+    private String gender
+    private String bio
+    private String email
+    private String phone
+    private String facebook
+    private List<String> likes
 
     User() {}
 
-    User(String firstName, String lastName, String dateOfBirth, String gender, String bio, String email, String facebook, List<String> likes) {
+    User(String firstName, String lastName, String age, String gender, String bio, String email, String phone, String facebook, List<String> likes) {
         this.firstName = firstName
         this.lastName = lastName
-        this.dateOfBirth = dateOfBirth
+        this.age = age
         this.gender = gender
         this.bio = bio
         this.email = email
+        this.phone = phone
         this.facebook = facebook
         this.likes = likes
     }
@@ -54,12 +56,12 @@ class User {
         this.lastName = lastName
     }
 
-    String getDateOfBirth() {
-        return dateOfBirth
+    String getAge() {
+        return age
     }
 
-    void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth = dateOfBirth
+    void setAge(String age) {
+        this.age = age
     }
 
     String getGender() {
@@ -84,6 +86,14 @@ class User {
 
     void setEmail(String email) {
         this.email = email
+    }
+
+    String getPhone() {
+        return phone
+    }
+
+    void setPhone(String phone) {
+        this.phone = phone
     }
 
     String getFacebook() {

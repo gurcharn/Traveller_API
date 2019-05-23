@@ -17,3 +17,8 @@ management:
 
 jwt:
   secretKey: traveller_api_secret_key_jwt
+
+google:
+  places:
+    api:
+      key: AIzaSyCNIyvdXvvrtcxN9JdcgfxuPzTLSrQhB4o
