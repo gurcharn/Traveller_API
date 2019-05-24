@@ -1,6 +1,5 @@
 package app.places
 
-import com.google.maps.model.PlacesSearchResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.PostMapping
@@ -14,20 +13,20 @@ import org.springframework.web.client.HttpClientErrorException
 class PlacesController {
 
     @Autowired
-    private GeoPlacesService geoPlacesService
+    private GooglePlacesService googlePlacesService
 
     @PostMapping("/textSearch")
-    Map<String, PlacesSearchResponse> getPlacesByTextSearch(@RequestBody PlaceRequest placeRequest){
-        if(placeRequest.isValid())
-            return geoPlacesService.getPlacesByTextSearch(placeRequest)
+    Set<Place> getPlacesByTextSearch(@RequestBody PlaceRequest[] placeRequest){
+        if(placeRequest[0].isValid())
+            return googlePlacesService.getPlacesByTextSearch(placeRequest[0])
         else
             throw  new HttpClientErrorException(HttpStatus.BAD_REQUEST , "Invalid request for places")
     }
 
     @PostMapping("/nearby")
-    Map<String, PlacesSearchResponse> getPlacesNearby(@RequestBody PlaceRequest placeRequest){
-        if(placeRequest.isValid())
-            return geoPlacesService.getPlacesNearby(placeRequest)
+    Set<Place> getPlacesNearby(@RequestBody PlaceRequest[] placeRequest){
+        if(placeRequest[0].isValid())
+            return googlePlacesService.getPlacesNearby(placeRequest[0])
         else
             throw  new HttpClientErrorException(HttpStatus.BAD_REQUEST , "Invalid request for places")
     }

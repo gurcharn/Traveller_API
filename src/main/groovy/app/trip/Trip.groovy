@@ -69,5 +69,6 @@ class Trip {
     int hashCode () {
         return Objects.hash(getUserId(), getPlace(), getArrival(), getDeparture())
     }
+
 }
 
