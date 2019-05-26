@@ -43,12 +43,20 @@ class Trip {
         return (arrival.getYear()+1900) + "-" + (arrival.getMonth()+1) + "-" + (arrival.getDate())
     }
 
+    Date getArrivalDate () {
+        return arrival
+    }
+
     void setArrival (Date arrival) {
         this.arrival=arrival
     }
 
     String getDeparture () {
         return (departure.getYear()+1900) + "-" + (departure.getMonth()+1) + "-" + (departure.getDate())
+    }
+
+    Date getDepartureDate () {
+        return departure
     }
 
     void setDeparture (Date departure) {

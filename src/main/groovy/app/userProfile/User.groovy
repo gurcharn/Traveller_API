@@ -3,6 +3,8 @@ package app.userProfile
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
+import javax.jws.soap.SOAPBinding
+
 @Document
 class User {
 
@@ -105,10 +107,32 @@ class User {
     }
 
     List<String> getLikes() {
-        return likes
+        if(likes == null)
+            return new ArrayList<String>()
+        else
+            return likes
     }
 
     void setLikes(List<String> likes) {
         this.likes = likes
+    }
+
+
+    @Override
+    boolean equals (Object o) {
+        if(this==null && o==null) return true
+        if(this!=null && o==null) return false
+        if(this==null && o!=null) return false
+        if(!(o instanceof User)) return false
+        User user = (User) o
+        return (this.getUserId() == user.getUserId())
+    }
+
+    /**
+     * Method to get hash of object
+     * @return int
+     */
+    int hashCode() {
+        return (userId != null ? userId.hashCode() : 0)
     }
 }

@@ -6,6 +6,6 @@ import javax.jws.soap.SOAPBinding
 
 interface UserService extends MongoRepository<User, String> {
 
-    User findByUserId(String userId);
-    List<User> findByEmail(String email);
+    User findByUserId(String userId)
+    List<User> findByEmail(String email)
 }
