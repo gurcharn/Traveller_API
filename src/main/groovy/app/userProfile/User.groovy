@@ -3,8 +3,6 @@ package app.userProfile
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
-import javax.jws.soap.SOAPBinding
-
 @Document
 class User {
 
