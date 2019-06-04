@@ -53,17 +53,10 @@ class TripController {
     }
 
     @DeleteMapping
-    Trip deleteTrip(@RequestBody Trip trip){
-        if(!isUserIdExist(trip.getUserId()))
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "User doesn't exist")
-        else if(!isTripExist(trip))
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "Trip doesn't exist")
-        else if(!isTripValid(trip) || !trip.getTripId())
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST , "Not a valid trip")
-        else{
-            tripService.delete(trip)
-            return trip
-        }
+    Trip deleteTrip(@RequestParam(required = true) String tripId){
+        Trip trip = tripService.findByTripId(tripId)
+        tripService.delete(trip.getTripId())
+        return trip
     }
 
     private boolean isTripValid(Trip trip){
