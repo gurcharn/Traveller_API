@@ -21,4 +21,4 @@ jwt:
 google:
   places:
     api:
-      key: AIzaSyCNIyvdXvvrtcxN9JdcgfxuPzTLSrQhB4o
+      key: YOUR_API_KEY
